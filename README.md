@@ -12,38 +12,43 @@ Erdős, Szüsz, and Turán (1958) studied the asymptotic distribution of rationa
 
 ### Resolution
 
-Kesten and Sós (1966) proved that the limit exists for all $A > 0$ and $c \ge 1$. Subsequently, Florin P. Boca, Cristian Cobeli, and Alexandru Zaharescu gave the explicit limit formula via Farey-triangle integrals.
+Harry Kesten and Vera T. Sós (1966) proved that the limit exists for all $A > 0$ and $c \ge 1$. Subsequently, Florin P. Boca, Cristian Cobeli, and Alexandru Zaharescu gave the explicit limit formula via Farey-triangle integrals.
 
 ## Formalization Details
 
-- **Bridge File:** `JSP_000833.lean`
-- **Main Modules:** `Erdos1001.lean`
+- **Contract Specification:** `Challenge.lean` defines `JSP000833.jsp000833Statement`.
+- **Implementation & Proof:** `Submission.lean` bridges to the Diophantine approximation formalization in `Erdos1001.lean`.
 - **Main Theorem:**
   ```lean
-  theorem jsp_000833_solved (A c : ℝ) (hA : 0 < A) (hc : 1 ≤ c) :
-      Erdos1001.IsLimitValue A c (Erdos1001.erdosSzuszTuranLimit A c) :=
-    Erdos1001.erdos_1001 A c hA hc
+  theorem jsp_000833_solved : jsp000833Statement := by
+    intro A c hA hc
+    exact Erdos1001.erdos_1001 A c hA hc
   ```
-- **Axioms Check:**
-  `#print axioms jsp_000833_solved` yields strictly:
+- **Axiom Audit:**
+  `#print axioms jsp_000833_solved` depends strictly on standard foundational Lean axioms:
   ```lean
-  [propext, Classical.choice, Quot.sound]
+  [Classical.choice, Quot.sound, propext]
   ```
-  **Zero** unproved hypotheses, zero `sorry`, zero `admit`.
+  **Zero** unproved hypotheses, zero `sorry`, zero `admit`, zero custom axioms.
 
-## Build & Verification Instructions
+## Verification & Reproducibility
 
 ### Toolchain
-- **Lean:** `leanprover/lean4:v4.33.0`
-- **Mathlib:** `v4.33.0`
+- **Lean:** `leanprover/lean4:v4.34.0`
+- **Mathlib:** `v4.34.0` (commit `5ed2965256430c3649e86755f9576b54eca72435`)
 
-### Build
+### Automated Verification
+Run the self-contained verification script:
 ```bash
-lake exe cache get
-lake build
+python3 check.py
 ```
+This script validates:
+1. Complete compilation via `lake build`.
+2. Clean source check (0 `sorry`, 0 `admit`, 0 `axiom`).
+3. Definitional equality bridge contract check against `Challenge.lean`.
+4. Strict foundational axiom whitelist conformance.
 
 ## Attribution & Provenance
 - **Mathematical Solution:** Harry Kesten, Vera T. Sós, Florin P. Boca, Cristian Cobeli, and Alexandru Zaharescu.
-- **Formal Authors:** Codex, GPT-5.6 Sol, with upstream formalization in `plby/lean-proofs` (`src/latest/ErdosProblems/Erdos1001.lean`).
-- **Packaging & Verification:** Maintained and verified by 赵钦 (Qin Zhao, GitHub: [@Drag0ndddd1118](https://github.com/Drag0ndddd1118)).
+- **Formal Proof Authors:** OpenAI Codex and GPT-5.6 Sol, with upstream proof in `plby/lean-proofs`.
+- **Packaging, DefEq Bridge Contract & Verification:** Maintained and audited by 赵钦 (Qin Zhao, GitHub: [@Drag0ndddd1118](https://github.com/Drag0ndddd1118)).
